@@ -1,0 +1,2 @@
+export const GET_DECKLIST = 'GET_DECKINFO'
+export const GET_DECKINFO = 'GET_DECKINFO'
