@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
 import { TabNavigator, StackNavigator } from 'react-navigation'
@@ -9,6 +9,7 @@ import DeckList from './components/DeckList'
 import DeckInfo from './components/DeckInfo'
 import NewDeck from './components/NewDeck'
 import { Constants } from 'expo'
+import thunk from 'redux-thunk'
 
 function StatusBar ({backgroundColor, ...props}) {
   return (
@@ -68,11 +69,16 @@ const MainNavigator = StackNavigator({
   }
 })
 
+const store = createStore(
+  reducer,
+  applyMiddleware(thunk)
+)
+
 
 export default class App extends React.Component {
   render() {
     return (
-      <Provider store={createStore(reducer)}>
+      <Provider store={store}>
       <View style={{flex: 1}}>
       
         <MainNavigator />

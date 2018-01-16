@@ -1,37 +1,50 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Platform, TouchableOpacity, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
-import { getDecklist  } from '../actions'
-//import { timeToString, getDailyReminderValue } from '../utils/helpers'
-import { fetchDecksList } from '../utils/api'
-//import UdaciFitnessCalendar from 'udacifitness-calendar'
+import { getDecklist, getDeckInfo, getList } from '../actions'
+import { GET_DECKLIST } from '../actions/types'
+import { fetchDecksList, setDummyData, initialData } from '../utils/api'
 import { white, black } from '../utils/colors'
 import { AppLoading } from 'expo'
+import TextButton from './TextButton'
 
 class DeckList extends Component {
   state = {
-    ready: true,
+    ready: false
   }
   componentDidMount() {
-    const { dispatch } = this.props
-    //console.log('cdm before this.props', this.props)
-    dispatch(getDecklist())
-    // fetchDecksList()
-    //   .then((decks) => {
-    //     console.log('fetch decks', decks)
-    //     return dispatch(getDecklist(decks))})
-    //   .then(({deckList}) => {console.log('then fetch', decks)})
-    //   .then(() => this.setState(() => ({ ready: true })))
-    //   .catch((err) => {console.log('err',err)})
+    fetchDecksList()
+      .then(results => {
+        if (results === null) {
+          setDummyData()
+          return initialData
+        }
+        else {
+          return results
+        }
+      })
+      .then(results => {
+        // console.log('CDM results', results)
+        this.props.onGetDecks(results)
+      })
+      .then(() => {
+        this.setState({ ready: true })
+      })
+      .catch(reason => { console.log('failure in DeckList-CDM', reason) })
 
-    //console.log('cdm after this.props', this.props)
+    // AsyncStorage.setItem('vikram:flashcards', JSON.stringify(initialData), () => {
+    //     AsyncStorage.getItem('vikram:flashcards', (err, result) => {
+    //       console.log('result', result);
+    //     });
+    // });
   }
 
+  onPress = () => { this.props.onGetDeckInfo('React') }
 
   render() {
-    const { decks } = this.props
-    const { ready } = this.state
-    console.log('keys', Object.keys(decks))
+    const { decksList, deckInfo } = this.props
+    const { ready, selectedDeck } = this.state
+    // console.log('render decksList', decksList, 'render decksInfo', deckInfo)
 
     if (ready === false) {
       return <AppLoading />
@@ -39,22 +52,22 @@ class DeckList extends Component {
 
     return (
       <View style={styles.item}>
-        {Object.keys(decks).length > 0 
-          ? Object.keys(decks).map((deck) => {
+        {decksList && Object.keys(decksList).length > 0
+          ? Object.keys(decksList).map((deck) => {
             return (
-              <View key={decks[deck].title} >
+              <View key={decksList[deck].title} >
                 <TouchableOpacity
                   onPress={() => this.props.navigation.navigate(
                     'DeckInfo',
-                    { deckName: decks[deck].title }
+                    { deckName: decksList[deck].title }
                   )}
                 >
                   <Text style={styles.noDataText}>
-                    {decks[deck].title}
+                    {decksList[deck].title}
                   </Text>
                   <Text style={styles.noDataText}>
-                  {decks[deck].questions.length} cards
-          </Text>
+                    {decksList[deck].questions.length} cards
+                  </Text>
                 </TouchableOpacity>
               </View>
             )
@@ -63,8 +76,17 @@ class DeckList extends Component {
           <View style={styles.item}>
             <Text style={styles.noDataText}>
               There are no decks. Create new deck.
-        </Text>
-          </View>}
+            </Text>
+          </View>
+        }
+        <View>
+          <TextButton style={{ margin: 20 }} onPress={this.onPress}>
+            Check AsyncStorage
+          </TextButton>
+          <Text style={styles.noDataText}>
+            {deckInfo ? deckInfo.title : ''}
+          </Text>
+        </View>
       </View>
     )
   }
@@ -95,13 +117,18 @@ const styles = StyleSheet.create({
   }
 })
 
-
-function mapStateToProps(decks) {
+const mapStateToProps = (state) => {
   return {
-    decks
+    decksList: state.decksList,
+    deckInfo: state.deckInfo
   }
 }
 
-export default connect(
-  mapStateToProps,
-)(DeckList)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onGetDecks: results => { dispatch(getDecklist(results)) },
+    onGetDeckInfo: deckName => { dispatch(getDeckInfo(deckName)) }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeckList)

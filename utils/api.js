@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native'
 export const VPFLASHCARDS_STORAGE_KEY = 'vikram:flashcards'
 
-const initialData = {
+export const initialData = {
   React: {
     title: 'React',
     questions: [
@@ -27,29 +27,11 @@ const initialData = {
 }
 
 export function setDummyData() {
-  
   AsyncStorage.setItem(VPFLASHCARDS_STORAGE_KEY, JSON.stringify(initialData))
-  return initialData
 }
 
-export function fetchDecksList () {
-  return initialData
-  // return AsyncStorage.getItem(VPFLASHCARDS_STORAGE_KEY)
-  // .then((results) => {
-  //   console.log('results',results)
-  //   return results === null
-  //   ? initialData
-  //   : JSON.parse(results)
-  // })
-
-  // AsyncStorage.setItem(VPFLASHCARDS_STORAGE_KEY, JSON.stringify(initialData)).then(() => {
-  // return AsyncStorage.getItem(VPFLASHCARDS_STORAGE_KEY)
-  //   .then((results) => {
-  //     console.log('results',results)
-  //     const data = JSON.parse(results)
-  //     return data
-  //   })
-  // })
+export function fetchDecksList() {
+  return AsyncStorage.getItem(VPFLASHCARDS_STORAGE_KEY)
 }
 
 export function createDeck (deckName) {
