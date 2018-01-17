@@ -3,7 +3,7 @@ import { fetchDecksList, setDummyData, initialData } from '../utils/api'
 
 export function getDecklist(results) {
   return function (dispatch, getState) {
-    dispatch({type: types.GET_DECKLIST, payload: JSON.parse(results)})
+    dispatch({type: types.GET_DECKLIST, payload: results})
   }
 }
 

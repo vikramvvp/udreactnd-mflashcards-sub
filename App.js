@@ -1,17 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View, Platform } from 'react-native';
+import { StyleSheet, Text, View, Platform, StatusBar, Dimensions } from 'react-native';
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
 import { TabNavigator, StackNavigator } from 'react-navigation'
-import { purple, white } from './utils/colors'
+import { purple, white, red, gray } from './utils/colors'
 import DeckList from './components/DeckList'
 import DeckInfo from './components/DeckInfo'
 import NewDeck from './components/NewDeck'
 import { Constants } from 'expo'
 import thunk from 'redux-thunk'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
-function StatusBar ({backgroundColor, ...props}) {
+function FCardStatusBar({ backgroundColor, ...props }) {
   return (
     <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
       <StatusBar translucent backgroundColor={backgroundColor} {...props} />
@@ -19,40 +21,42 @@ function StatusBar ({backgroundColor, ...props}) {
   )
 }
 
+const screenWidth = Dimensions.get('window').width;
+
 const Tabs = TabNavigator({
   DeckList: {
     screen: DeckList,
     navigationOptions: {
       tabBarLabel: 'Decks',
-      tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={30} color={tintColor} />
+
+      tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={26} color={tintColor} />
     },
   },
   NewDeck: {
     screen: NewDeck,
     navigationOptions: {
       tabBarLabel: 'New Deck',
-      tabBarIcon: ({ tintColor }) => <FontAwesome name='plus-square' size={30} color={tintColor} />
+      tabBarIcon: ({ tintColor }) => <FontAwesome name='plus-square' size={26} color={tintColor} />
     },
   }
-}, {
-  navigationOptions: {
-    header: null
-  },
-  tabBarOptions: {
-    activeTintColor: Platform.OS === 'ios' ? purple : white,
-    style: {
-      height: 56,
-      backgroundColor: Platform.OS === 'ios' ? white : purple,
-      shadowColor: 'rgba(0, 0, 0, 0.24)',
-      shadowOffset: {
-        width: 0,
-        height: 3
+},
+  {
+    navigationOptions: {
+      header: null
+    },
+    tabBarOptions: {
+      labelStyle: {
+        fontWeight:"bold"
       },
-      shadowRadius: 6,
-      shadowOpacity: 1
+      tabStyle: {
+        width: screenWidth / 2
+      },
+      style: {
+        paddingTop: Constants.statusBarHeight/4
+      }
+
     }
-  }
-})
+  })
 
 const MainNavigator = StackNavigator({
   Home: {
@@ -61,6 +65,7 @@ const MainNavigator = StackNavigator({
   DeckInfo: {
     screen: DeckInfo,
     navigationOptions: {
+
       headerTintColor: white,
       headerStyle: {
         backgroundColor: purple,
@@ -79,13 +84,13 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-      <View style={{flex: 1}}>
-      
-        <MainNavigator />
+        <View style={{flex:1,}}>
 
-      </View>
-    </Provider>
-      
+          <MainNavigator />
+
+        </View>
+      </Provider>
+
     );
   }
 }
@@ -93,8 +98,9 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: Constants.statusBarHeight,
+    backgroundColor: '#ecf0f1',
   },
 });

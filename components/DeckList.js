@@ -17,20 +17,20 @@ class DeckList extends React.Component {
   state = { ready: false }
 
   componentDidMount() {
-    console.log('cdm')
+    //console.log('cdm')
     fetchDecksList()
       .then(results => {
-        console.log('results', results)
+        //console.log('results', results)
         if (results === null) {
           setDummyData()
           return initialData
         }
         else {
-          return results
+          return JSON.parse(results)
         }
       })
       .then(results => {
-        console.log('CDM results', results)
+        //console.log('CDM results', results)
         // convert object to array with _.values and add id inside objects
         this.props.onGetDecks(_.values(_.mapValues(results, (value, key) => { value.id = key; return value; })))
       })
@@ -60,13 +60,14 @@ class DeckList extends React.Component {
     <MyListItem
       id={item.id}
       onPressItem={this._onPressItem}
-      selected={!!this.state.selected.get(item.id)}
+      //selected={!!this.state.selected.get(item.id)}
       title={item.title}
+      qcount={item.questions.length}
     />
   );
 
   render() {
-    console.log('propos', this.props.decksList)
+    //console.log('propos', this.props.decksList)
     const { ready } = this.state
     if (ready === false) {
       return <AppLoading />

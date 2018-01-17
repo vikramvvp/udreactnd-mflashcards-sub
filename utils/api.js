@@ -6,7 +6,7 @@ export function setDummyData() {
 }
 
 export function fetchDecksList() {
-  console.log('fetch')
+  //console.log('fetch')
   return AsyncStorage.getItem(VPFLASHCARDS_STORAGE_KEY)
 }
 
