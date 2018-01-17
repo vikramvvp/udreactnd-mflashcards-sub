@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, Platform, TouchableOpacity, AsyncStorage, FlatList } from 'react-native'
 import { connect } from 'react-redux'
@@ -30,7 +31,8 @@ class DeckList extends React.Component {
       })
       .then(results => {
         console.log('CDM results', results)
-        this.props.onGetDecks(results)
+        // convert object to array with _.values and add id inside objects
+        this.props.onGetDecks(_.values(_.mapValues(results, (value, key) => { value.id = key; return value; })))
       })
       .then(() => {
         this.setState({ ready: true })
