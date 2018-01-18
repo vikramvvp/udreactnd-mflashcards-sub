@@ -1,66 +1,75 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, KeyboardAvoidingView } from 'react-native'
 import { connect } from 'react-redux'
 //import { timeToString, getDailyReminderValue } from '../utils/helpers'
 import Card from './Card'
-import { white, black } from '../utils/colors'
+import AddCard from './AddCard'
+import { white, black, gray } from '../utils/colors'
 import TextButton from './TextButton'
 //import { addEntry } from '../actions'
 //import { removeEntry } from '../utils/api'
 
-class DeckInfo extends Component {
+const screenWidth = Dimensions.get('window').width;
 
+
+class DeckInfo extends Component {
+  
   reset = () => {
     const { goBack } = this.props
     goBack()
   }
 
-  onStartQuiz = (questions) => {
+  onStartQuiz = () => {
+    const { navigation } = this.props
+    const { deckInfo } = navigation.state.params
     this.props.navigation.navigate(
       'Card',
-      { cards }
+      { cards: deckInfo.questions }
     )
   }
 
   onAddCard = () => {
+    const { navigation } = this.props
+    const { deckInfo } = navigation.state.params
     this.props.navigation.navigate(
       'AddCard',
-      { deckId }
+      { deckId: deckInfo.id }
     )
   }
 
   render() {
+    const { navigation } = this.props
     const { deckInfo } = navigation.state.params
-    const { cards: questions } = deckInfo
+    const cards = deckInfo.questions
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container}>
         <View style={{ paddingBottom: 50 }}>
           <Text style={{ fontSize: 20 }}>
             {deckInfo.title}
           </Text>
           <Text style={{ fontSize: 16, color: gray }}>
-            {questions ? questions.length : 0} cards
+            {cards ? cards.length : 0} cards
           </Text>
         </View>
-        <View style={styles.container}>
+        <View style={{ paddingBottom: 20  }}>
           <TouchableOpacity
             style={styles.whiteButton}
             onPress={this.onAddCard}
           >
-            <Text>Add Card</Text>
+            <Text style={{color:black}}>Add Card</Text>
           </TouchableOpacity>
         </View>
         {cards && cards.length > 0 ? 
-        <View style={styles.container}>
+        <View style={{ paddingBottom: 20 }}>
           <TouchableOpacity
             style={styles.blackButton}
-            onPress={this.onStartQuiz(cards)}
+            onPress={this.onStartQuiz}
           >
-            <Text>Start Quiz</Text>
+            <Text style={{color:white}}>Start Quiz</Text>
           </TouchableOpacity>
         </View>
         : ''}
-      </View>
+      </KeyboardAvoidingView>
     )
   }
 }
@@ -69,18 +78,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: white,
+    justifyContent: 'center',
+    alignItems:'center',
     padding: 15,
   },
   blackButton: {
-    color: white,
+    width: screenWidth/2,
     alignItems: 'center',
     backgroundColor: black,
     padding: 10
   },
   whiteButton: {
-    color: black,
+    width: screenWidth/2,
     alignItems: 'center',
-    backgroundColor: white,
+    backgroundColor: gray,
     padding: 10
   },
 })

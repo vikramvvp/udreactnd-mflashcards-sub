@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 //import { timeToString, getDailyReminderValue } from '../utils/helpers'
 //import MetricCard from './MetricCard'
@@ -47,7 +47,7 @@ class AddCard extends Component {
       <View style={styles.container}>
         <TouchableOpacity
           style={styles.submitBtn}
-          onPress={onPress}>
+          onPress={this.onSubmit}>
             <Text style={styles.submitBtnText}>SUBMIT</Text>
         </TouchableOpacity>
       </View>

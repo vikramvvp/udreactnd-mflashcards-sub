@@ -8,6 +8,8 @@ import { purple, white, red, gray } from './utils/colors'
 import DeckList from './components/DeckList'
 import DeckInfo from './components/DeckInfo'
 import NewDeck from './components/NewDeck'
+import AddCard from './components/AddCard'
+import Card from './components/Card'
 import { Constants } from 'expo'
 import thunk from 'redux-thunk'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -52,7 +54,8 @@ const Tabs = TabNavigator({
         width: screenWidth / 2
       },
       style: {
-        paddingTop: Constants.statusBarHeight / 4
+        paddingTop: Constants.statusBarHeight / 4,
+        backgroundColor: purple
       }
 
     }
@@ -65,7 +68,27 @@ const MainNavigator = StackNavigator({
   DeckInfo: {
     screen: DeckInfo,
     navigationOptions: {
-
+      title: 'Deck Info',
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple,
+      }
+    }
+  },
+  AddCard: {
+    screen: AddCard,
+    navigationOptions: {
+      title: 'Add New Card',
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple,
+      }
+    }
+  },
+  Card: {
+    screen: Card,
+    navigationOptions: {
+      title: 'Quiz',
       headerTintColor: white,
       headerStyle: {
         backgroundColor: purple,
