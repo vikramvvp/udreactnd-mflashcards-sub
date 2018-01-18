@@ -6,12 +6,11 @@ import { SafeAreaView } from 'react-navigation'
 
 class MyListItem extends React.PureComponent {
   _onPress = () => {
-    this.props.onPressItem(this.props.id);
+    this.props.onPressItem(this.props.itemInfo);
   };
 
   render() {
     //console.log('thisprops', this.props)
-    const textColor = this.props.selected ? red : black;
     return (
       <TouchableOpacity onPress={this._onPress}>
         <SafeAreaView
@@ -23,7 +22,7 @@ class MyListItem extends React.PureComponent {
               {this.props.id}
             </Text>
             <Text style={styles.description}>
-              {this.props.qcount} cards
+              {this.props.itemInfo.questions ? this.props.itemInfo.questions.length : 0} cards
           </Text>
           </View>
         </SafeAreaView>

@@ -52,7 +52,7 @@ const Tabs = TabNavigator({
         width: screenWidth / 2
       },
       style: {
-        paddingTop: Constants.statusBarHeight/4
+        paddingTop: Constants.statusBarHeight / 4
       }
 
     }

@@ -42,10 +42,10 @@ class DeckList extends React.Component {
 
   _keyExtractor = (item, index) => item.id;
 
-  _onPressItem = (id) => {
+  _onPressItem = (itemInfo) => {
     this.props.navigation.navigate(
       'DeckInfo',
-      { deckName: id }
+      { deckInfo: itemInfo }
     )
     // updater functions are preferred for transactional updates
     // this.setState((state) => {
@@ -59,10 +59,9 @@ class DeckList extends React.Component {
   _renderItem = ({item}) => (
     <MyListItem
       id={item.id}
+      itemInfo={item}
       onPressItem={this._onPressItem}
       //selected={!!this.state.selected.get(item.id)}
-      title={item.title}
-      qcount={item.questions.length}
     />
   );
 
