@@ -10,10 +10,36 @@ export function fetchDecksList() {
   return AsyncStorage.getItem(VPFLASHCARDS_STORAGE_KEY)
 }
 
+function fetchDeckInfo(deckId) {
+  return AsyncStorage.getItem(VPFLASHCARDS_STORAGE_KEY)
+    .then(results => {
+      data = JSON.parse(results)
+      return data[deckId]
+    }) 
+    .catch(reason=>{console.log('failure api-fetchDeckInfo',reason)})
+}
+
 export function createDeck (deckName) {
   return AsyncStorage.mergeItem(VPFLASHCARDS_STORAGE_KEY, JSON.stringify({
-    [deckName]: {}
+    [deckName]: {title: deckName}
   }))
+}
+
+export function addCard (deckId, question, answer) {
+  return AsyncStorage.getItem(VPFLASHCARDS_STORAGE_KEY)
+  .then((results) => {
+    const data = JSON.parse(results)
+    if (data[deckId].questions) {
+      data[deckId].questions.concat[{question,answer}]
+    }
+    else {
+      data[deckId].questions = [{question,answer}]
+    }
+    return AsyncStorage.setItem(VPFLASHCARDS_STORAGE_KEY, JSON.stringify(data))
+  })
+  .then(()=>{
+    return fetchDeckInfo()
+  })
 }
 
 export function removeDeck (deckName) {
