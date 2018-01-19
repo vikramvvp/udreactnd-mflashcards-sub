@@ -31,6 +31,7 @@ class DeckInfo extends Component {
   onAddCard = () => {
     const { navigation } = this.props
     const { deckInfo } = navigation.state.params
+    //console.log('deckInfo',deckInfo)
     this.props.navigation.navigate(
       'AddCard',
       { deckId: deckInfo.id }
@@ -48,7 +49,7 @@ class DeckInfo extends Component {
             {deckInfo.title}
           </Text>
           <Text style={{ fontSize: 16, color: gray }}>
-            {cards ? cards.length : 0} cards
+            {cards ? cards.length : '0'} cards
           </Text>
         </View>
         <View style={{ paddingBottom: 20  }}>
@@ -56,19 +57,18 @@ class DeckInfo extends Component {
             style={styles.whiteButton}
             onPress={this.onAddCard}
           >
-            <Text style={{color:black}}>Add Card</Text>
+            <Text style={{color:white}}>Add Card</Text>
           </TouchableOpacity>
         </View>
-        {cards && cards.length > 0 ? 
-        <View style={{ paddingBottom: 20 }}>
-          <TouchableOpacity
-            style={styles.blackButton}
-            onPress={this.onStartQuiz}
-          >
-            <Text style={{color:white}}>Start Quiz</Text>
-          </TouchableOpacity>
-        </View>
-        : ''}
+        {(cards && cards.length > 0) && 
+          (<View style={{ paddingBottom: 20 }}>
+            <TouchableOpacity
+              style={styles.blackButton}
+              onPress={this.onStartQuiz}
+            >
+              <Text style={{color:white}}>Start Quiz</Text>
+            </TouchableOpacity>
+          </View>)}
       </KeyboardAvoidingView>
     )
   }

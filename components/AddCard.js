@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 import { connect } from 'react-redux'
 //import { timeToString, getDailyReminderValue } from '../utils/helpers'
 //import MetricCard from './MetricCard'
 import { white, purple } from '../utils/colors'
 import TextButton from './TextButton'
 import { insertCard } from '../actions'
-//import { removeEntry } from '../utils/api'
+import { addCard } from '../utils/api'
 
 class AddCard extends Component {
   state = {
@@ -18,29 +19,46 @@ class AddCard extends Component {
     goBack()
   }
   onSubmit = () => {
-    dispatch(insertCard(this.state.question, this.state.answer))
-    this.setState({text:''})
-    const { goBack } = this.props
-    goBack()
+    const { goBack,onInsertCard,navigation } = this.props
+    const {deckId} = navigation.state.params
+    addCard(deckId, this.state.question, this.state.answer)
+    .then((deckInfo)=>{
+        this.setState({question: '', answer: ''})
+        console.log('qlength', deckInfo.questions.length);
+        navigation.dispatch(NavigationActions.navigate({routeName:'DeckInfo', params: {deckInfo}}))
+      })
+      .catch(reason=>{console.log('failure action-insertDeck',reason)})
+
+    //const deckInfo = onInsertCard(deckId,this.state.question, this.state.answer)
+    // console.log('qlength', deckInfo.questions.length);
+    // this.setState({question: '', answer: ''})
+    
+    // goBack(deckInfo)
     //this.props.navigation.dispatch(NavigationActions.back({key: 'DeckInfo'}))
   }
   
   render() {
     return (
-    <View>
-      <View style={styles.inputContainer}>
+    <View style={styles.container}>
+      <View >
         <Text>Question: </Text>
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(e) => this.setState({question: e.target.value})}
+          maxLength={100}
+          multiline = {true}
+          numberOfLines = {4}
+          style={{borderColor: 'gray', borderWidth: 1, height:120}}
+          onChangeText={(text) => this.setState({question: text})}
           value={this.state.question}
         />
       </View>
-      <View style={styles.inputContainer}>
+      <View>
         <Text>Answer: </Text>
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(e) => this.setState({answer: e.target.value})}
+          maxLength={100}
+          multiline = {true}
+          numberOfLines = {4}
+          style={{borderColor: 'gray', borderWidth: 1, height:120}}
+          onChangeText={(text) => this.setState({answer: text})}
           value={this.state.answer}
         />
       </View>
@@ -99,8 +117,8 @@ function mapDispatchToProps (dispatch, { navigation }) {
   // const { entryId } = navigation.state.params
 
   return {
-    
-    goBack: () => navigation.goBack(),
+    onInsertCard: (deckId,q,a) => {dispatch(insertCard(deckId,q,a))},
+    goBack: (deckInfo) => navigation.navigate('DeckInfo', {deckInfo}),
   }
 }
 

@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-navigation'
 
 class MyListItem extends React.PureComponent {
   _onPress = () => {
-    this.props.onPressItem(this.props.itemInfo);
+    this.props.onPressItem(this.props.itemInfo, this.props.backHandler);
   };
 
   render() {

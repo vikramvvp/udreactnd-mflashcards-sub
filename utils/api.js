@@ -30,15 +30,16 @@ export function addCard (deckId, question, answer) {
   .then((results) => {
     const data = JSON.parse(results)
     if (data[deckId].questions) {
-      data[deckId].questions.concat[{question,answer}]
+      data[deckId].questions = data[deckId].questions.concat([{question,answer}])
     }
     else {
       data[deckId].questions = [{question,answer}]
     }
-    return AsyncStorage.setItem(VPFLASHCARDS_STORAGE_KEY, JSON.stringify(data))
+    //console.log('qq',data[deckId].questions)
+    return AsyncStorage.mergeItem(VPFLASHCARDS_STORAGE_KEY, JSON.stringify(data))
   })
   .then(()=>{
-    return fetchDeckInfo()
+    return fetchDeckInfo(deckId)
   })
 }
 

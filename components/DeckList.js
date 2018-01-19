@@ -16,6 +16,8 @@ class DeckList extends React.Component {
   // state = {selected: (new Map())};
   state = { ready: false }
 
+  handleOnNavigateBack = () => {this.setState({ready:false})}
+
   componentDidMount() {
     //console.log('cdm')
     fetchDecksList()
@@ -32,7 +34,7 @@ class DeckList extends React.Component {
       .then(results => {
         //console.log('CDM results', results)
         // convert object to array with _.values and add id inside objects
-        this.props.onGetDecks(_.values(_.mapValues(results, (value, key) => { value.id = key; return value; })))
+        this.props.onGetDecks(_.orderBy(_.values(_.mapValues(results, (value, key) => { value.id = key; return value; })), ['id'], ['asc']))
       })
       .then(() => {
         this.setState({ ready: true })
@@ -42,10 +44,11 @@ class DeckList extends React.Component {
 
   _keyExtractor = (item, index) => item.id;
 
-  _onPressItem = (itemInfo) => {
+  _onPressItem = (itemInfo,backHandler) => {
     this.props.navigation.navigate(
       'DeckInfo',
-      { deckInfo: itemInfo }
+      { deckInfo: itemInfo,
+        onNavigateBack: backHandler}
     )
     // updater functions are preferred for transactional updates
     // this.setState((state) => {
@@ -61,6 +64,7 @@ class DeckList extends React.Component {
       id={item.id}
       itemInfo={item}
       onPressItem={this._onPressItem}
+      backHandler={this.handleOnNavigateBack}
       //selected={!!this.state.selected.get(item.id)}
     />
   );

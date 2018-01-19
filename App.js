@@ -82,7 +82,8 @@ const MainNavigator = StackNavigator({
       headerTintColor: white,
       headerStyle: {
         backgroundColor: purple,
-      }
+      },
+      
     }
   },
   Card: {

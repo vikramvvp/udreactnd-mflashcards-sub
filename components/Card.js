@@ -126,7 +126,7 @@ class Card extends Component {
               style={styles.whiteButton}
               onPress={this.onRestart}
             >
-              <Text style={{color:black}}>Restart Quiz</Text>
+              <Text style={{color:white}}>Restart Quiz</Text>
             </TouchableOpacity>
           </View>
           <View style={{ paddingBottom: 20 }}>
