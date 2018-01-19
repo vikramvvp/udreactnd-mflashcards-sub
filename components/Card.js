@@ -57,7 +57,7 @@ class Card extends Component {
     const { cards } = navigation.state.params
     const correctionPercent = this.state.correctCardsCount / cards.length
     return (
-      <View style={{ flex:1, paddingBottom: 50, alignContent: 'center' }}>
+      <View style={{ paddingBottom: 50 }}>
         <Text style={{ fontSize: 20 }}>
           {correctionPercent >= 0.8 ? 
             `Excellent! You answered ${this.state.correctCardsCount} out of ${cards.length} correctly; go back and study another deck.`
