@@ -4,6 +4,8 @@ import { white, purple } from '../utils/colors'
 import TextButton from './TextButton'
 import { createDeck } from '../utils/api'
 import {NavigationActions} from 'react-navigation'
+import { insertDeck } from '../actions'
+import { connect } from 'react-redux'
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -28,12 +30,11 @@ class NewDeck extends Component {
         <TouchableOpacity
           style={styles.submitBtn}
           onPress={()=>{
-              createDeck(this.state.text)
-              .then(()=>{
+              this.props.onInsert(this.state.text)
               this.setState({text:''})
               //this.props.navigation.state.params.onNavigateBack()
               this.props.navigation.dispatch(NavigationActions.back())
-              })
+              
             }}>
             <Text style={styles.submitBtnText}>SUBMIT</Text>
         </TouchableOpacity>
@@ -79,4 +80,16 @@ const styles = StyleSheet.create({
   }
 })
 
-export default NewDeck
+const mapStateToProps = (state) => {
+  return {
+    decksList: state.decksList,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onInsert: (deckName) => {dispatch(insertDeck(deckName))},
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewDeck)

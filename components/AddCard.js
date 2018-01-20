@@ -19,7 +19,7 @@ class AddCard extends Component {
         this.setState({question: '', answer: ''})
         navigation.dispatch(NavigationActions.navigate({routeName:'DeckInfo', params: {deckInfo}}))
       })
-      .catch(reason=>{console.log('failure action-insertDeck',reason)})
+      .catch(reason=>{console.log('failure addcard-onsubmit',reason)})
   }
   
   render() {

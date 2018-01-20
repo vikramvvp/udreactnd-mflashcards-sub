@@ -22,7 +22,7 @@ function fetchDeckInfo(deckId) {
 export function createDeck (deckName) {
   return AsyncStorage.mergeItem(VPFLASHCARDS_STORAGE_KEY, JSON.stringify({
     [deckName]: {title: deckName}
-  }))
+  })).catch((reason)=>{console.log('createdeck-mergeItem', reason)})
 }
 
 export function addCard (deckId, question, answer) {

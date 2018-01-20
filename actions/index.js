@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import * as types from './types'
 import { fetchDecksList, setDummyData, initialData, createDeck, addCard } from '../utils/api'
 import { AsyncStorage } from 'react-native';
@@ -23,8 +24,12 @@ export function insertDeck(deckName) {
   return function (dispatch, getState) {
     createDeck(deckName)
       .then(()=>{
-        
-        dispatch({type: types.GET_DECKINFO, payload: {title: deckName}})
+        return fetchDecksList()
+        .then(results => {
+          return dispatch({
+              type: types.GET_DECKLIST, 
+              payload: _.orderBy(_.values(_.mapValues(JSON.parse(results), (value, key) => { value.id = key; return value; })), ['id'], ['asc'])})
+        })
       })
       .catch(reason=>{console.log('failure action-insertDeck',reason)})
   }

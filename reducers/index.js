@@ -3,7 +3,6 @@ import * as types from '../actions/types'
 function decks (state = {}, action) {
   switch (action.type) {
     case types.GET_DECKLIST :
-      // console.log('action', action)
       return {
         ...state,
         decksList: action.payload,
