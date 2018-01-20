@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Platform, StatusBar, Dimensions } from 'react-native';
+import { StyleSheet, View, StatusBar, Dimensions } from 'react-native';
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
@@ -15,14 +15,6 @@ import thunk from 'redux-thunk'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
-function FCardStatusBar({ backgroundColor, ...props }) {
-  return (
-    <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
-      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
-    </View>
-  )
-}
-
 const screenWidth = Dimensions.get('window').width;
 
 const Tabs = TabNavigator({
@@ -30,7 +22,6 @@ const Tabs = TabNavigator({
     screen: DeckList,
     navigationOptions: {
       tabBarLabel: 'Decks',
-
       tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={26} color={tintColor} />
     },
   },
@@ -103,15 +94,12 @@ const store = createStore(
   applyMiddleware(thunk)
 )
 
-
 export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
         <View style={{flex:1,}}>
-
           <MainNavigator />
-
         </View>
       </Provider>
 

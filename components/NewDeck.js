@@ -1,13 +1,9 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TextInput,TouchableOpacity, Dimensions } from 'react-native'
-import { connect } from 'react-redux'
-//import { timeToString, getDailyReminderValue } from '../utils/helpers'
-//import MetricCard from './MetricCard'
 import { white, purple } from '../utils/colors'
 import TextButton from './TextButton'
-import { insertDeck } from '../actions'
+import { createDeck } from '../utils/api'
 import {NavigationActions} from 'react-navigation'
-//import { removeEntry } from '../utils/api'
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -15,17 +11,6 @@ class NewDeck extends Component {
   state = {
     text: ''
   }
-  reset = () => {
-    const { goBack } = this.props
-    goBack()
-  }
-  // onSubmit = () => {
-  //   const { goBack, dispatch } = this.props
-  //   dispatch(insertDeck(this.state.text))
-  //   this.setState({text:''})
-  //   //this.props.navigation.dispatch(NavigationActions.back({key: 'DeckList'}))
-  //   goBack()
-  // }
   
   render() {
     return (
@@ -43,12 +28,12 @@ class NewDeck extends Component {
         <TouchableOpacity
           style={styles.submitBtn}
           onPress={()=>{
-              this.props.onSubmit(this.state.text)
+              createDeck(this.state.text)
+              .then(()=>{
               this.setState({text:''})
-              //this.props.goBack()
-              console.log('navstate',this.props.navigation)
-              this.props.navigation.state.params.onNavigateBack()
+              //this.props.navigation.state.params.onNavigateBack()
               this.props.navigation.dispatch(NavigationActions.back())
+              })
             }}>
             <Text style={styles.submitBtnText}>SUBMIT</Text>
         </TouchableOpacity>
@@ -91,34 +76,7 @@ const styles = StyleSheet.create({
     height: 40, 
     borderColor: 'gray', 
     borderWidth: 1, 
-    //width:screenWidth/2
   }
 })
 
-// function mapStateToProps (state, { navigation }) {
-//   const { entryId } = navigation.state.params
-
-//   return {
-//     entryId,
-//     metrics: state[entryId],
-//   }
-// }
-
-function mapDispatchToProps (dispatch, { navigation }) {
-  // const { entryId } = navigation.state.params
-
-  return {
-    onSubmit: (deckName) => {
-      dispatch(insertDeck(deckName))
-      
-      //this.props.navigation.dispatch(NavigationActions.back({key: 'DeckList'}))
-      //goBack()
-    },
-    goBack: () => navigation.goBack(),
-  }
-}
-
-export default connect(
-  null,
-  mapDispatchToProps,
-)(NewDeck)
+export default NewDeck

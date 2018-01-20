@@ -1,6 +1,6 @@
 import * as types from './types'
 import { fetchDecksList, setDummyData, initialData, createDeck, addCard } from '../utils/api'
-import { AsyncStorage } from './C:/Users/admin/AppData/Local/Microsoft/TypeScript/2.6/node_modules/@types/react-native';
+import { AsyncStorage } from 'react-native';
 
 export function getDecklist(results) {
   return function (dispatch, getState) {

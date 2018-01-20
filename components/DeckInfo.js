@@ -1,24 +1,14 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, KeyboardAvoidingView } from 'react-native'
-import { connect } from 'react-redux'
-//import { timeToString, getDailyReminderValue } from '../utils/helpers'
 import Card from './Card'
 import AddCard from './AddCard'
 import { white, black, gray } from '../utils/colors'
 import TextButton from './TextButton'
-//import { addEntry } from '../actions'
-//import { removeEntry } from '../utils/api'
 
 const screenWidth = Dimensions.get('window').width;
 
-
 class DeckInfo extends Component {
   
-  reset = () => {
-    const { goBack } = this.props
-    goBack()
-  }
-
   onStartQuiz = () => {
     const { navigation } = this.props
     const { deckInfo } = navigation.state.params
@@ -31,7 +21,6 @@ class DeckInfo extends Component {
   onAddCard = () => {
     const { navigation } = this.props
     const { deckInfo } = navigation.state.params
-    //console.log('deckInfo',deckInfo)
     this.props.navigation.navigate(
       'AddCard',
       { deckId: deckInfo.id }
@@ -96,29 +85,4 @@ const styles = StyleSheet.create({
   },
 })
 
-// function mapStateToProps (state, { navigation }) {
-//   const { entryId } = navigation.state.params
-
-//   return {
-//     entryId,
-//     metrics: state[entryId],
-//   }
-// }
-
-function mapDispatchToProps(dispatch, { navigation }) {
-  // const { entryId } = navigation.state.params
-
-  return {
-    // remove: () => dispatch(addEntry({
-    //   [entryId]: timeToString() === entryId
-    //     ? getDailyReminderValue()
-    //     : null
-    // })),
-    goBack: () => navigation.goBack(),
-  }
-}
-
-export default connect(
-  null,
-  mapDispatchToProps,
-)(DeckInfo)
+export default DeckInfo
