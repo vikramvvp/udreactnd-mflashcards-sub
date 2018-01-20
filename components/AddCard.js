@@ -4,6 +4,8 @@ import { NavigationActions } from 'react-navigation'
 import { white, purple } from '../utils/colors'
 import TextButton from './TextButton'
 import { addCard } from '../utils/api'
+import { insertCard, getDeckInfo } from '../actions'
+import { connect } from 'react-redux'
 
 class AddCard extends Component {
   state = {
@@ -12,14 +14,18 @@ class AddCard extends Component {
   }
  
   onSubmit = () => {
-    const { navigation } = this.props
+    const { navigation, deckInfo } = this.props
     const {deckId} = navigation.state.params
-    addCard(deckId, this.state.question, this.state.answer)
-    .then((deckInfo)=>{
+    this.props.onInsert(deckId, this.state.question, this.state.answer)
+    this.props.onGetInfo(deckId)
+    //console.log('props.deckInfo',this.props.deckInfo)
+    // .then((deckInfo)=>{
         this.setState({question: '', answer: ''})
-        navigation.dispatch(NavigationActions.navigate({routeName:'DeckInfo', params: {deckInfo}}))
-      })
-      .catch(reason=>{console.log('failure addcard-onsubmit',reason)})
+        //navigation.dispatch(NavigationActions.navigate({routeName:'DeckInfo', params: {deckInfo:this.props.deckInfo}}))
+        navigation.dispatch(NavigationActions.back())
+        //navigation.dispatch(NavigationActions.navigate({routeName:'DeckList'}))
+      // })
+      // .catch(reason=>{console.log('failure addcard-onsubmit',reason)})
   }
   
   render() {
@@ -89,4 +95,18 @@ const styles = StyleSheet.create({
   },
 })
 
-export default AddCard
+const mapStateToProps = (state) => {
+  return {
+    decksList: state.decksList,
+    deckInfo: state.deckInfo
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onInsert: (deckId, q, a) => {dispatch(insertCard(deckId, q, a))},
+    onGetInfo: (deckId) => {dispatch(getDeckInfo(deckId))}
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddCard)

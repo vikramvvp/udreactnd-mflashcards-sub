@@ -37,7 +37,7 @@ class Card extends Component {
             {cards[this.state.cardSequenceId].question}
           </Text>
           <TextButton style={{padding: 10}} onPress={this.onToggleAnswer}>
-            Answer
+            Show Answer
           </TextButton> 
         </View>
       :
@@ -46,7 +46,7 @@ class Card extends Component {
             {cards[this.state.cardSequenceId].answer}
           </Text>
           <TextButton style={{padding: 10}} onPress={this.onToggleAnswer}>
-            Question
+            Show Question
           </TextButton> 
         </View>
     )
@@ -86,7 +86,7 @@ class Card extends Component {
   }
 
   toHome = () => {
-    this.props.navigation.dispatch(NavigationActions.back({key: 'Home'}))
+    this.props.navigation.dispatch(NavigationActions.back())
   }
 
   render() {
@@ -96,7 +96,7 @@ class Card extends Component {
     return (
     <View style={styles.container}>
       <View >
-        <Text>{cardSequenceId === cards.length ? cardSequenceId : cardSequenceId + 1} / {cards.length}</Text> 
+        <Text>Remaining: {cardSequenceId === cards.length ? 0 : cards.length - cardSequenceId + 1} / {cards.length}</Text> 
       </View>
       {cards.length !== (cardSequenceId) ? 
         <View style={styles.container}>
@@ -106,7 +106,7 @@ class Card extends Component {
               style={styles.greenButton}
               onPress={this.onCorrect}
             >
-              <Text>Correct</Text>
+              <Text style={{color:white}}>Correct</Text>
             </TouchableOpacity>
           </View>
           <View style={{ paddingBottom: 20 }}>
@@ -114,7 +114,7 @@ class Card extends Component {
               style={styles.redButton}
               onPress={this.onIncorrect}
             >
-              <Text>Incorrect</Text>
+              <Text style={{color:white}}>Incorrect</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -134,7 +134,7 @@ class Card extends Component {
               style={styles.blackButton}
               onPress={this.toHome}
             >
-              <Text style={{color:white}}>Go Back</Text>
+              <Text style={{color:white}}>Back to Deck</Text>
             </TouchableOpacity>
           </View>
         </View>

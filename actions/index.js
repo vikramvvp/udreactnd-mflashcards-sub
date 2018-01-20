@@ -9,6 +9,12 @@ export function getDecklist(results) {
   }
 }
 
+export function returnDeckInfo(deckInfo) {
+  return function (dispatch, getState) {
+    dispatch({type: types.GET_DECKINFO, payload: deckInfo})
+  }
+}
+
 export function getDeckInfo(deckId) {
   return function (dispatch, getState) {
     fetchDecksList()
@@ -38,15 +44,31 @@ export function insertDeck(deckName) {
 export function insertCard(deckId, question, answer) {
   return function (dispatch, getState) {
     addCard(deckId, question, answer)
-    .then((deckInfo)=>{
-    //console.log('insercarddeckInfo',deckInfo)
-    if (deckInfo) {
-      dispatch({type: types.GET_DECKINFO, payload: deckInfo})
-    }
-    else {
-      console.log('Error in getting updated deck info')
-    }
-    return deckInfo
-  })
+    .then(()=>{
+      return fetchDecksList()
+      .then(results => {
+        data = JSON.parse(results)
+        dispatch({
+          type: types.GET_DECKLIST, 
+          payload: _.orderBy(_.values(_.mapValues(data, (value, key) => { value.id = key; return value; })), ['id'], ['asc'])})
+        //dispatch({type: types.GET_DECKINFO, payload: data[deckId]})
+        
+      })
+      
+      
+    })
+
+    .catch(reason=>{console.log('failure action-insertCard',reason)})
   }
 }
+  //   .then((deckInfo)=>{
+  //   //console.log('insercarddeckInfo',deckInfo)
+  //   if (deckInfo) {
+  //     dispatch({type: types.GET_DECKINFO, payload: deckInfo})
+  //   }
+  //   else {
+  //     console.log('Error in getting updated deck info')
+  //   }
+  //   return deckInfo
+  // })
+  

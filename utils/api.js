@@ -38,9 +38,9 @@ export function addCard (deckId, question, answer) {
     //console.log('qq',data[deckId].questions)
     return AsyncStorage.mergeItem(VPFLASHCARDS_STORAGE_KEY, JSON.stringify(data))
   })
-  .then(()=>{
-    return fetchDeckInfo(deckId)
-  })
+  // .then(()=>{
+  //   return fetchDeckInfo(deckId)
+  // })
 }
 
 export function removeDeck (deckName) {

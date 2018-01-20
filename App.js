@@ -69,7 +69,7 @@ const MainNavigator = StackNavigator({
   AddCard: {
     screen: AddCard,
     navigationOptions: {
-      title: 'Add New Card',
+      title: 'Add New Question',
       headerTintColor: white,
       headerStyle: {
         backgroundColor: purple,

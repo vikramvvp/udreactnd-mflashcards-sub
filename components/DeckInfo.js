@@ -4,11 +4,38 @@ import Card from './Card'
 import AddCard from './AddCard'
 import { white, black, gray } from '../utils/colors'
 import TextButton from './TextButton'
+import { connect } from 'react-redux'
+import { AppLoading } from 'expo'
+import {getDeckInfo, returnDeckInfo} from '../actions'
+import { fetchDecksList } from '../utils/api'
+import * as types from '../actions/types'
 
 const screenWidth = Dimensions.get('window').width;
 
 class DeckInfo extends Component {
+  state = {
+    ready: false
+  }
   
+  componentDidMount() {
+    const { navigation, dispatch } = this.props
+    const { deckInfo } = navigation.state.params
+    
+
+    // if (deckInfo) {
+    //   this.setState({ready: true})
+    // }
+    fetchDecksList()
+    .then((results) => {
+      const data = JSON.parse(results)
+      this.props.onReturnDeckInfo(data[deckInfo.id])
+    })
+    .then(()=>{this.setState({ready: true})})
+    .catch(reason=>{console.log('failure action-getDeckInfo',reason)})
+    //this.props.onGetInfo(deckInfo.id)
+    
+  }
+
   onStartQuiz = () => {
     const { navigation } = this.props
     const { deckInfo } = navigation.state.params
@@ -28,8 +55,17 @@ class DeckInfo extends Component {
   }
 
   render() {
-    const { navigation } = this.props
-    const { deckInfo } = navigation.state.params
+    const { ready } = this.state
+    if (ready === false) {
+      return <AppLoading />
+    }
+    else {
+
+    const { navigation, deckInfo } = this.props
+    // let { deckInfo } = navigation.state.params
+    // if (!deckInfo) {
+    //   deckInfo = this.props.deckInfo
+    // }
     const cards = deckInfo.questions
     return (
       <KeyboardAvoidingView style={styles.container}>
@@ -46,7 +82,7 @@ class DeckInfo extends Component {
             style={styles.whiteButton}
             onPress={this.onAddCard}
           >
-            <Text style={{color:white}}>Add Card</Text>
+            <Text style={{color:white}}>Create New Question</Text>
           </TouchableOpacity>
         </View>
         {(cards && cards.length > 0) && 
@@ -55,11 +91,12 @@ class DeckInfo extends Component {
               style={styles.blackButton}
               onPress={this.onStartQuiz}
             >
-              <Text style={{color:white}}>Start Quiz</Text>
+              <Text style={{color:white}}>Start a Quiz</Text>
             </TouchableOpacity>
           </View>)}
       </KeyboardAvoidingView>
     )
+  }
   }
 }
 
@@ -85,4 +122,17 @@ const styles = StyleSheet.create({
   },
 })
 
-export default DeckInfo
+const mapStateToProps = (state) => {
+  return {
+    deckInfo: state.deckInfo
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onGetInfo: (deckId) => {dispatch(getDeckInfo(deckId))},
+    onReturnDeckInfo: (deckInfo) => {dispatch(returnDeckInfo(deckInfo))}
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeckInfo)
