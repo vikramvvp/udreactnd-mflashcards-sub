@@ -37,8 +37,7 @@ class DeckInfo extends Component {
   }
 
   onStartQuiz = () => {
-    const { navigation } = this.props
-    const { deckInfo } = navigation.state.params
+    const { deckInfo } = this.props.navigation.state.params
     this.props.navigation.navigate(
       'Card',
       { cards: deckInfo.questions }
@@ -46,8 +45,7 @@ class DeckInfo extends Component {
   }
 
   onAddCard = () => {
-    const { navigation } = this.props
-    const { deckInfo } = navigation.state.params
+    const { deckInfo } = this.props.navigation.state.params
     this.props.navigation.navigate(
       'AddCard',
       { deckId: deckInfo.id }

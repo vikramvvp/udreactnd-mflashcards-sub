@@ -96,7 +96,7 @@ class Card extends Component {
     return (
     <View style={styles.container}>
       <View >
-        <Text>Remaining: {cardSequenceId === cards.length ? 0 : cards.length - cardSequenceId + 1} / {cards.length}</Text> 
+        <Text>Remaining: {cardSequenceId === cards.length ? 0 : cards.length - cardSequenceId} / {cards.length}</Text> 
       </View>
       {cards.length !== (cardSequenceId) ? 
         <View style={styles.container}>

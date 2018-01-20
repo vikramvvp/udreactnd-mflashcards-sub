@@ -13,22 +13,9 @@ class AddCard extends Component {
     answer: ''
   }
  
-  onSubmit = () => {
-    const { navigation, deckInfo } = this.props
-    const {deckId} = navigation.state.params
-    this.props.onInsert(deckId, this.state.question, this.state.answer)
-    this.props.onGetInfo(deckId)
-    //console.log('props.deckInfo',this.props.deckInfo)
-    // .then((deckInfo)=>{
-        this.setState({question: '', answer: ''})
-        //navigation.dispatch(NavigationActions.navigate({routeName:'DeckInfo', params: {deckInfo:this.props.deckInfo}}))
-        navigation.dispatch(NavigationActions.back())
-        //navigation.dispatch(NavigationActions.navigate({routeName:'DeckList'}))
-      // })
-      // .catch(reason=>{console.log('failure addcard-onsubmit',reason)})
-  }
-  
   render() {
+    const { navigation } = this.props
+    const { deckId } = navigation.state.params
     return (
     <View style={styles.container}>
       <View >
@@ -36,7 +23,7 @@ class AddCard extends Component {
         <TextInput
           maxLength={100}
           multiline = {true}
-          numberOfLines = {4}
+          numberOfLines = {2}
           style={{borderColor: 'gray', borderWidth: 1, height:120}}
           onChangeText={(text) => this.setState({question: text})}
           value={this.state.question}
@@ -47,7 +34,7 @@ class AddCard extends Component {
         <TextInput
           maxLength={100}
           multiline = {true}
-          numberOfLines = {4}
+          numberOfLines = {2}
           style={{borderColor: 'gray', borderWidth: 1, height:120}}
           onChangeText={(text) => this.setState({answer: text})}
           value={this.state.answer}
@@ -56,7 +43,11 @@ class AddCard extends Component {
       <View style={styles.container}>
         <TouchableOpacity
           style={styles.submitBtn}
-          onPress={this.onSubmit}>
+          onPress={()=>{
+            this.props.onInsert(deckId, this.state.question, this.state.answer)
+            this.setState({question: '', answer: ''})
+            navigation.dispatch(NavigationActions.back())
+          }}>
             <Text style={styles.submitBtnText}>SUBMIT</Text>
         </TouchableOpacity>
       </View>

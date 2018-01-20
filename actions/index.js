@@ -5,13 +5,13 @@ import { AsyncStorage } from 'react-native';
 
 export function getDecklist(results) {
   return function (dispatch, getState) {
-    dispatch({type: types.GET_DECKLIST, payload: results})
+    return dispatch({type: types.GET_DECKLIST, payload: results})
   }
 }
 
 export function returnDeckInfo(deckInfo) {
   return function (dispatch, getState) {
-    dispatch({type: types.GET_DECKINFO, payload: deckInfo})
+    return dispatch({type: types.GET_DECKINFO, payload: deckInfo})
   }
 }
 
@@ -43,24 +43,23 @@ export function insertDeck(deckName) {
 
 export function insertCard(deckId, question, answer) {
   return function (dispatch, getState) {
+    //console.log(deckId)
     addCard(deckId, question, answer)
     .then(()=>{
       return fetchDecksList()
       .then(results => {
         data = JSON.parse(results)
-        dispatch({
-          type: types.GET_DECKLIST, 
-          payload: _.orderBy(_.values(_.mapValues(data, (value, key) => { value.id = key; return value; })), ['id'], ['asc'])})
-        //dispatch({type: types.GET_DECKINFO, payload: data[deckId]})
-        
+        dispatch(getDecklist(_.orderBy(_.values(_.mapValues(data, (value, key) => { value.id = key; return value; })), ['id'], ['asc'])))
+        return data[deckId]
       })
-      
-      
+      .then((deckInfo)=>{
+        return dispatch(returnDeckInfo(deckInfo))
+      })
     })
-
     .catch(reason=>{console.log('failure action-insertCard',reason)})
   }
 }
+
   //   .then((deckInfo)=>{
   //   //console.log('insercarddeckInfo',deckInfo)
   //   if (deckInfo) {
