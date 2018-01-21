@@ -14,8 +14,6 @@ class DeckList extends React.Component {
   
   state = { ready: false }
 
-  handleOnNavigateBack = () => {this.setState({ready:false})}
-
   componentDidMount() {
     fetchDecksList()
       .then(results => {
@@ -39,11 +37,10 @@ class DeckList extends React.Component {
 
   _keyExtractor = (item, index) => item.id;
 
-  _onPressItem = (itemInfo,backHandler) => {
+  _onPressItem = (deckId) => {
     this.props.navigation.navigate(
       'DeckInfo',
-      { deckInfo: itemInfo,
-        onNavigateBack: backHandler}
+      { deckId }
     )
   };
 
@@ -52,7 +49,6 @@ class DeckList extends React.Component {
       id={item.id}
       itemInfo={item}
       onPressItem={this._onPressItem}
-      backHandler={this.handleOnNavigateBack}
     />
   );
 

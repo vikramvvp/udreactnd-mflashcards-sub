@@ -24,7 +24,7 @@ class AddCard extends Component {
           maxLength={100}
           multiline = {true}
           numberOfLines = {2}
-          style={{borderColor: 'gray', borderWidth: 1, height:120}}
+          style={{borderColor: 'gray', borderWidth: 1, height:60}}
           onChangeText={(text) => this.setState({question: text})}
           value={this.state.question}
         />
@@ -35,7 +35,7 @@ class AddCard extends Component {
           maxLength={100}
           multiline = {true}
           numberOfLines = {2}
-          style={{borderColor: 'gray', borderWidth: 1, height:120}}
+          style={{borderColor: 'gray', borderWidth: 1, height:60}}
           onChangeText={(text) => this.setState({answer: text})}
           value={this.state.answer}
         />

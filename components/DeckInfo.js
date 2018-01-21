@@ -6,7 +6,7 @@ import { white, black, gray } from '../utils/colors'
 import TextButton from './TextButton'
 import { connect } from 'react-redux'
 import { AppLoading } from 'expo'
-import {getDeckInfo, returnDeckInfo} from '../actions'
+import { returnDeckInfo } from '../actions'
 import { fetchDecksList } from '../utils/api'
 import * as types from '../actions/types'
 
@@ -16,39 +16,32 @@ class DeckInfo extends Component {
   state = {
     ready: false
   }
-  
+
   componentDidMount() {
     const { navigation, dispatch } = this.props
-    const { deckInfo } = navigation.state.params
-    
+    const { deckId } = navigation.state.params
 
-    // if (deckInfo) {
-    //   this.setState({ready: true})
-    // }
     fetchDecksList()
-    .then((results) => {
-      const data = JSON.parse(results)
-      this.props.onReturnDeckInfo(data[deckInfo.id])
-    })
-    .then(()=>{this.setState({ready: true})})
-    .catch(reason=>{console.log('failure action-getDeckInfo',reason)})
-    //this.props.onGetInfo(deckInfo.id)
-    
+      .then((results) => {
+        const data = JSON.parse(results)
+        this.props.onReturnDeckInfo(data[deckId])
+      })
+      .then(() => { this.setState({ ready: true }) })
+      .catch(reason => { console.log('failure deckInfo-CDM-fetchDecksList', reason) })
   }
 
-  onStartQuiz = () => {
-    const { deckInfo } = this.props.navigation.state.params
+  onStartQuiz = (cards) => {
     this.props.navigation.navigate(
       'Card',
-      { cards: deckInfo.questions }
+      { cards }
     )
   }
 
   onAddCard = () => {
-    const { deckInfo } = this.props.navigation.state.params
+    const { deckId } = this.props.navigation.state.params
     this.props.navigation.navigate(
       'AddCard',
-      { deckId: deckInfo.id }
+      { deckId: deckId }
     )
   }
 
@@ -58,43 +51,38 @@ class DeckInfo extends Component {
       return <AppLoading />
     }
     else {
-
-    const { navigation, deckInfo } = this.props
-    // let { deckInfo } = navigation.state.params
-    // if (!deckInfo) {
-    //   deckInfo = this.props.deckInfo
-    // }
-    const cards = deckInfo.questions
-    return (
-      <KeyboardAvoidingView style={styles.container}>
-        <View style={{ paddingBottom: 50 }}>
-          <Text style={{ fontSize: 20 }}>
-            {deckInfo.title}
+      const { navigation, deckInfo } = this.props
+      const cards = deckInfo.questions
+      return (
+        <KeyboardAvoidingView style={styles.container}>
+          <View style={{ paddingBottom: 50 }}>
+            <Text style={{ fontSize: 20 }}>
+              {deckInfo.title}
+            </Text>
+            <Text style={{ fontSize: 16, color: gray }}>
+              {cards ? cards.length : '0'} cards
           </Text>
-          <Text style={{ fontSize: 16, color: gray }}>
-            {cards ? cards.length : '0'} cards
-          </Text>
-        </View>
-        <View style={{ paddingBottom: 20  }}>
-          <TouchableOpacity
-            style={styles.whiteButton}
-            onPress={this.onAddCard}
-          >
-            <Text style={{color:white}}>Create New Question</Text>
-          </TouchableOpacity>
-        </View>
-        {(cards && cards.length > 0) && 
-          (<View style={{ paddingBottom: 20 }}>
+          </View>
+          <View style={{ paddingBottom: 20 }}>
             <TouchableOpacity
-              style={styles.blackButton}
-              onPress={this.onStartQuiz}
+              style={styles.whiteButton}
+              onPress={this.onAddCard}
             >
-              <Text style={{color:white}}>Start a Quiz</Text>
+              <Text style={{ color: white }}>Create New Question</Text>
             </TouchableOpacity>
-          </View>)}
-      </KeyboardAvoidingView>
-    )
-  }
+          </View>
+          {(cards && cards.length > 0) &&
+            (<View style={{ paddingBottom: 20 }}>
+              <TouchableOpacity
+                style={styles.blackButton}
+                onPress={() => (this.onStartQuiz(cards))}
+              >
+                <Text style={{ color: white }}>Start a Quiz</Text>
+              </TouchableOpacity>
+            </View>)}
+        </KeyboardAvoidingView>
+      )
+    }
   }
 }
 
@@ -103,17 +91,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: white,
     justifyContent: 'center',
-    alignItems:'center',
+    alignItems: 'center',
     padding: 15,
   },
   blackButton: {
-    width: screenWidth/2,
+    width: screenWidth / 2,
     alignItems: 'center',
     backgroundColor: black,
     padding: 10
   },
   whiteButton: {
-    width: screenWidth/2,
+    width: screenWidth / 2,
     alignItems: 'center',
     backgroundColor: gray,
     padding: 10
@@ -128,8 +116,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onGetInfo: (deckId) => {dispatch(getDeckInfo(deckId))},
-    onReturnDeckInfo: (deckInfo) => {dispatch(returnDeckInfo(deckInfo))}
+    onReturnDeckInfo: (deckInfo) => { dispatch(returnDeckInfo(deckInfo)) }
   }
 }
 
