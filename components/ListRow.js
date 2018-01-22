@@ -3,15 +3,15 @@ import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native
 import { black, gray } from '../utils/colors'
 import { Constants } from 'expo'
 
-const ANIMATION_DURATION = 250;
+const ANIMATION_DURATION = 150;
 const ROW_HEIGHT = 70;
 
-class MyListItem extends React.PureComponent {
+class ListRow extends React.PureComponent {
   constructor(props) {
     super(props);
     this._animated = new Animated.Value(0);
   }
-
+  
   componentDidMount() {
     Animated.timing(this._animated, {
       toValue: 1,
@@ -73,7 +73,7 @@ class MyListItem extends React.PureComponent {
   }
 }
 
-export default MyListItem
+export default ListRow
 
 const styles = StyleSheet.create({
   item: {

@@ -7,7 +7,7 @@ import { GET_DECKLIST } from '../actions/types'
 import { fetchDecksList, setDummyData, initialData } from '../utils/api'
 import { white, black, red } from '../utils/colors'
 import { AppLoading } from 'expo'
-import MyListItem from './MyListItem'
+import ListRow from './ListRow'
 import TextButton from './TextButton'
 
 class DeckList extends React.Component {
@@ -45,7 +45,7 @@ class DeckList extends React.Component {
   };
 
   _renderItem = ({item}) => (
-    <MyListItem
+    <ListRow
       id={item.id}
       itemInfo={item}
       onPressItem={this._onPressItem}

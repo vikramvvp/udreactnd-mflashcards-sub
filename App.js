@@ -14,6 +14,7 @@ import { Constants } from 'expo'
 import thunk from 'redux-thunk'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { setLocalNotification } from './utils/helpers'
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -95,6 +96,10 @@ const store = createStore(
 )
 
 export default class App extends React.Component {
+  componentDidMount() {
+    setLocalNotification()
+  }
+  
   render() {
     return (
       <Provider store={store}>
