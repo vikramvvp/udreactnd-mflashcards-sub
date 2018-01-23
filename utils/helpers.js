@@ -6,7 +6,7 @@ const NOTIFICATION_KEY = 'vikram:flashcards:notifications'
 function createNotification () {
   return {
     title: 'Study your quizzes!',
-    body: `👋 don't forget to study atleast one quiz for today ${Date.now().toLocaleString()}!`,
+    body: "👋 don't forget to study atleast one quiz for today!",
     ios: {
       sound: true,
     },
