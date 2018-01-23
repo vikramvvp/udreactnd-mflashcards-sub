@@ -37,7 +37,7 @@ class DeckInfo extends Component {
     const { deckId } = this.props.navigation.state.params
     this.props.navigation.navigate(
       'AddCard',
-      { deckId: deckId }
+      { deckId }
     )
   }
 
@@ -104,11 +104,7 @@ const styles = StyleSheet.create({
   },
 })
 
-const mapStateToProps = (state) => {
-  return {
-    deckInfo: state.deckInfo
-  }
-}
+const mapStateToProps = ({deckInfo}) => ({deckInfo})
 
 const mapDispatchToProps = (dispatch) => {
   return {

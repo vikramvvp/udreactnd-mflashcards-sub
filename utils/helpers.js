@@ -3,21 +3,19 @@ import {AsyncStorage} from 'react-native'
 
 const NOTIFICATION_KEY = 'vikram:flashcards:notifications'
 
-function createNotification () {
-  return {
-    title: 'Study your quizzes!',
-    body: "👋 don't forget to study atleast one quiz for today!",
-    ios: {
-      sound: true,
-    },
-    android: {
-      sound: true,
-      priority: 'high',
-      sticky: false,
-      vibrate: true,
-    }
+const createNotification = () => ({
+  title: 'Study your quizzes!',
+  body: "👋 don't forget to study atleast one quiz for today!",
+  ios: {
+    sound: true,
+  },
+  android: {
+    sound: true,
+    priority: 'high',
+    sticky: false,
+    vibrate: true,
   }
-}
+})
 
 export function clearLocalNotification () {
   return AsyncStorage.removeItem(NOTIFICATION_KEY)

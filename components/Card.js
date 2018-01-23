@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
 import { connect } from 'react-redux'
 import { clearLocalNotification, setLocalNotification } from '../utils/helpers'
-import { white, black, green, red, gray } from '../utils/colors'
+import { white, black, green, red, gray, purple } from '../utils/colors'
 import TextButton from './TextButton'
 import { NavigationActions } from 'react-navigation'
+import FlipCard from 'react-native-flip-card'
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -20,27 +21,28 @@ class Card extends Component {
     this.setState({showAnswer: !currentShowAnswer})
   }
 
-  toggleQA(showAnswer) {
+  showFlipCard() {
     const { navigation } = this.props
     const { cards } = navigation.state.params
-    return (!showAnswer ? 
-        <View style={{ paddingBottom: 50 }}>
-          <Text style={{ fontSize: 20 }}>
-            {cards[this.state.cardSequenceId].question}
-          </Text>
-          <TextButton style={{padding: 10}} onPress={this.onToggleAnswer}>
-            Show Answer
-          </TextButton> 
-        </View>
-      :
-        <View style={{ paddingBottom: 50 }}>
-          <Text style={{ fontSize: 20, color: gray }}>
-            {cards[this.state.cardSequenceId].answer}
-          </Text>
-          <TextButton style={{padding: 10}} onPress={this.onToggleAnswer}>
-            Show Question
-          </TextButton> 
-        </View>
+    return (
+      <View style={{height:120, paddingBottom:40}}>
+        <FlipCard style={{borderWidth:0}}
+          alignWidth={true}
+          friction={6}
+          perspective={1000}
+          flipHorizontal={true}
+          flipVertical={false}
+          flip={false}
+          clickable={true}
+        >
+          <View  style={{alignSelf:'center' }}>
+            <Text style={{ fontSize: 20, color: black }}>{cards[this.state.cardSequenceId].question}</Text>
+          </View>
+          <View style={{alignSelf:'center' }}>
+            <Text style={{ fontSize: 20, color: gray }}>{cards[this.state.cardSequenceId].answer}</Text>
+          </View>
+        </FlipCard>
+      </View>
     )
   }
 
@@ -96,7 +98,10 @@ class Card extends Component {
       </View>
       {cards.length !== (cardSequenceId) ? 
         <View style={styles.container}>
-          {this.toggleQA(showAnswer)}
+          {this.showFlipCard()}
+          <Text style={{fontSize:12, padding: 10, color:gray}}>
+            Click on question to flip to answer
+          </Text> 
           <View style={{ paddingBottom: 20 }}>
             <TouchableOpacity
               style={styles.greenButton}

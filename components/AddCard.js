@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Alert } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { white, purple } from '../utils/colors'
 import { insertCard, getDeckInfo } from '../actions'
@@ -9,6 +9,24 @@ class AddCard extends Component {
   state = {
     question: '',
     answer: ''
+  }
+
+  onSubmit = (deckId) => {
+    if (this.state.question.trim() === '' || this.state.answer.trim() === '') {
+      Alert.alert(
+        'Invalid Inputs!',
+        'Question or Answer cannot be blank! Please revise inputs.',
+        [
+          {text: 'OK'},
+        ],
+        { cancelable: false }
+      )
+    }
+    else {
+      this.props.onInsert(deckId, this.state.question, this.state.answer)
+      this.setState({question: '', answer: ''})
+      this.props.navigation.dispatch(NavigationActions.back())
+    }
   }
  
   render() {
@@ -41,11 +59,7 @@ class AddCard extends Component {
       <View style={styles.container}>
         <TouchableOpacity
           style={styles.submitBtn}
-          onPress={()=>{
-            this.props.onInsert(deckId, this.state.question, this.state.answer)
-            this.setState({question: '', answer: ''})
-            navigation.dispatch(NavigationActions.back())
-          }}>
+          onPress={()=>{this.onSubmit(deckId)}}>
             <Text style={styles.submitBtnText}>SUBMIT</Text>
         </TouchableOpacity>
       </View>

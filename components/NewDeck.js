@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Alert } from 'react-native'
 import { white, purple } from '../utils/colors'
 import { NavigationActions } from 'react-navigation'
 import { insertDeck } from '../actions'
@@ -9,6 +9,25 @@ class NewDeck extends Component {
   state = {
     text: ''
   }
+
+  onSubmit = () => {
+    if (this.state.text === '' ) {
+      Alert.alert(
+        'Invalid Inputs!',
+        'Deck name cannot be blank! Please revise input.',
+        [
+          {text: 'OK'},
+        ],
+        { cancelable: false }
+      )
+    }
+    else {
+      this.props.onInsert(this.state.text)
+      this.setState({text:''})
+      this.props.navigation.dispatch(NavigationActions.navigate({routeName:'DeckInfo', params:{deckId:this.state.text}}))
+    }
+  }
+  
   
   render() {
     return (
@@ -25,12 +44,7 @@ class NewDeck extends Component {
       <View style={styles.container}>
         <TouchableOpacity
           style={styles.submitBtn}
-          onPress={()=>{
-              this.props.onInsert(this.state.text)
-              this.setState({text:''})
-              this.props.navigation.dispatch(NavigationActions.back())
-              
-            }}>
+          onPress={()=>{this.onSubmit()}}>
             <Text style={styles.submitBtnText}>SUBMIT</Text>
         </TouchableOpacity>
       </View>

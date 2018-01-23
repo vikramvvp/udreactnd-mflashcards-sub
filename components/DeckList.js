@@ -65,11 +65,8 @@ class DeckList extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    decksList: state.decksList,
-  }
-}
+const mapStateToProps = ({decksList}) => ({decksList})
+  
 
 const mapDispatchToProps = (dispatch) => {
   return {
