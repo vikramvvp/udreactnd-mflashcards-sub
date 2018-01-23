@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
 import { connect } from 'react-redux'
-//import { timeToString, getDailyReminderValue } from '../utils/helpers'
-//import MetricCard from './MetricCard'
+import { clearLocalNotification, setLocalNotification } from '../utils/helpers'
 import { white, black, green, red, gray } from '../utils/colors'
 import TextButton from './TextButton'
-//import { addEntry } from '../actions'
-//import { removeEntry } from '../utils/api'
 import { NavigationActions } from 'react-navigation'
 
 const screenWidth = Dimensions.get('window').width;
@@ -16,11 +13,6 @@ class Card extends Component {
     cardSequenceId: 0,
     correctCardsCount:0,
     showAnswer: false
-  }
-
-  reset = () => {
-    const { goBack } = this.props
-    goBack()
   }
 
   onToggleAnswer = () => {
@@ -68,16 +60,19 @@ class Card extends Component {
       </View>
     )
   }
-  
-  onCorrect = () => {
-    let {correctCardsCount, cardSequenceId} = this.state
-    this.setState({correctCardsCount: ++correctCardsCount, cardSequenceId: ++cardSequenceId})
-    
-  }
 
-  onIncorrect = () => {
-    let {cardSequenceId} = this.state
-    this.setState({cardSequenceId: ++cardSequenceId})
+  onAnswer = (answer, isFininshed) => {
+    let {correctCardsCount, cardSequenceId} = this.state
+    if (answer === 'correct') {
+      this.setState({correctCardsCount: ++correctCardsCount, cardSequenceId: ++cardSequenceId})
+    }
+    else {
+      this.setState({cardSequenceId: ++cardSequenceId})
+    }
+    if (isFininshed) {
+      clearLocalNotification()
+      .then(setLocalNotification)
+    }
   }
 
   onRestart = () => {
@@ -93,10 +88,11 @@ class Card extends Component {
     const { navigation } = this.props
     const { cards } = navigation.state.params
     const { cardSequenceId, showAnswer} = this.state
+    const remaining = cardSequenceId === cards.length ? 0 : cards.length - cardSequenceId
     return (
     <View style={styles.container}>
       <View >
-        <Text>Remaining: {cardSequenceId === cards.length ? 0 : cards.length - cardSequenceId} / {cards.length}</Text> 
+        <Text>Remaining: {remaining} / {cards.length}</Text> 
       </View>
       {cards.length !== (cardSequenceId) ? 
         <View style={styles.container}>
@@ -104,7 +100,7 @@ class Card extends Component {
           <View style={{ paddingBottom: 20 }}>
             <TouchableOpacity
               style={styles.greenButton}
-              onPress={this.onCorrect}
+              onPress={() => {this.onAnswer('correct', (remaining === 1))}}
             >
               <Text style={{color:white}}>Correct</Text>
             </TouchableOpacity>
@@ -112,7 +108,7 @@ class Card extends Component {
           <View style={{ paddingBottom: 20 }}>
             <TouchableOpacity
               style={styles.redButton}
-              onPress={this.onIncorrect}
+              onPress={() => {this.onAnswer('incorrect', (remaining === 1))}}
             >
               <Text style={{color:white}}>Incorrect</Text>
             </TouchableOpacity>
@@ -179,29 +175,4 @@ const styles = StyleSheet.create({
   },
 })
 
-// function mapStateToProps (state, { navigation }) {
-//   const { entryId } = navigation.state.params
-
-//   return {
-//     entryId,
-//     metrics: state[entryId],
-//   }
-// }
-
-function mapDispatchToProps(dispatch, { navigation }) {
-  // const { entryId } = navigation.state.params
-
-  return {
-    // remove: () => dispatch(addEntry({
-    //   [entryId]: timeToString() === entryId
-    //     ? getDailyReminderValue()
-    //     : null
-    // })),
-    goBack: () => navigation.goBack(),
-  }
-}
-
-export default connect(
-  null,
-  mapDispatchToProps,
-)(Card)
+export default Card

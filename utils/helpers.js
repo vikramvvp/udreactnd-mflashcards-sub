@@ -6,7 +6,7 @@ const NOTIFICATION_KEY = 'vikram:flashcards:notifications'
 function createNotification () {
   return {
     title: 'Study your quizzes!',
-    body: "👋 don't forget to study atlease one quiz for today!",
+    body: `👋 don't forget to study atleast one quiz for today ${Date.now().toLocaleString()}!`,
     ios: {
       sound: true,
     },
@@ -19,47 +19,45 @@ function createNotification () {
   }
 }
 
+export function clearLocalNotification () {
+  return AsyncStorage.removeItem(NOTIFICATION_KEY)
+    .then(Notifications.cancelAllScheduledNotificationsAsync)
+}
+
 export function setLocalNotification () {
-  console.log('set loc notif')
   AsyncStorage.getItem(NOTIFICATION_KEY)
     .then(result => {
-      console.log('set loc notif result',result)
       return JSON.parse(result)
     })
     .then((data) => {
-      console.log('set loc notif data',data)
-      // if (data === null) {
+      if (data === null) {
         Permissions.askAsync(Permissions.NOTIFICATIONS)
           .then(({ status }) => {
-            console.log('status',status)
             if (status === 'granted') {
               Notifications.cancelAllScheduledNotificationsAsync()
               
               let tomorrow = new Date()
-              tomorrow.setDate(tomorrow.getDate())
-              tomorrow.setHours(19)
-              tomorrow.setMinutes(44)
+              tomorrow.setDate(tomorrow.getDate()+1)
+              tomorrow.setHours(8)
+              tomorrow.setMinutes(0)
 
               Notifications.scheduleLocalNotificationAsync(
                 createNotification(),
                 {
                   time: tomorrow,
-                  repeat: 'minute',
+                  repeat: 'day',
                 }
               )
 
               AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true))
             }
-            else {
-              console.log('status not granted')
-            }
           })
           .catch(reason => {
-            console.log('permissions',reason)
+            console.log('permissions error: ',reason)
           })
-      // }
+      }
     })
     .catch(reason => {
-      console.log('set local notif error',reason)
+      console.log('set local notif error: ',reason)
     })
 }
