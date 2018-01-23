@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, KeyboardAvoidingView } from 'react-native'
-import Card from './Card'
-import AddCard from './AddCard'
 import { white, black, gray } from '../utils/colors'
-import TextButton from './TextButton'
 import { connect } from 'react-redux'
 import { AppLoading } from 'expo'
 import { returnDeckInfo } from '../actions'
 import { fetchDecksList } from '../utils/api'
-import * as types from '../actions/types'
 
 const screenWidth = Dimensions.get('window').width;
 

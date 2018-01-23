@@ -8,21 +8,13 @@ export function setDummyData() {
 export function fetchDecksList() {
   //console.log('fetch')
   return AsyncStorage.getItem(VPFLASHCARDS_STORAGE_KEY)
-}
-
-function fetchDeckInfo(deckId) {
-  return AsyncStorage.getItem(VPFLASHCARDS_STORAGE_KEY)
-    .then(results => {
-      data = JSON.parse(results)
-      return data[deckId]
-    }) 
-    .catch(reason=>{console.log('failure api-fetchDeckInfo',reason)})
+  .catch((reason)=>{console.log('fetchDecksList-getItem: ', reason)})
 }
 
 export function createDeck (deckName) {
   return AsyncStorage.mergeItem(VPFLASHCARDS_STORAGE_KEY, JSON.stringify({
     [deckName]: {title: deckName}
-  })).catch((reason)=>{console.log('createdeck-mergeItem', reason)})
+  })).catch((reason)=>{console.log('createdeck-mergeItem: ', reason)})
 }
 
 export function addCard (deckId, question, answer) {
@@ -35,22 +27,10 @@ export function addCard (deckId, question, answer) {
     else {
       data[deckId].questions = [{question,answer}]
     }
-    //console.log('qq',data[deckId].questions)
+    
     return AsyncStorage.mergeItem(VPFLASHCARDS_STORAGE_KEY, JSON.stringify(data))
   })
-  // .then(()=>{
-  //   return fetchDeckInfo(deckId)
-  // })
-}
-
-export function removeDeck (deckName) {
-  return AsyncStorage.getItem(VPFLASHCARDS_STORAGE_KEY)
-    .then((results) => {
-      const data = JSON.parse(results)
-      data[deckName] = undefined
-      delete data[deckName]
-      AsyncStorage.setItem(VPFLASHCARDS_STORAGE_KEY, JSON.stringify(data))
-    })
+  .catch((reason)=>{console.log('addCard-getItem: ', reason)})
 }
 
 export const initialData = {

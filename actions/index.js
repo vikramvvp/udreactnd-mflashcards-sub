@@ -22,7 +22,7 @@ export function getDeckInfo(deckId) {
       const data = JSON.parse(results)
       dispatch({type: types.GET_DECKINFO, payload: data[deckId]})
     })
-    .catch(reason=>{console.log('failure action-getDeckInfo',reason)})
+    .catch(reason=>{console.log('failure action-getDeckInfo: ',reason)})
   }
 }
 
@@ -37,7 +37,7 @@ export function insertDeck(deckName) {
               payload: _.orderBy(_.values(_.mapValues(JSON.parse(results), (value, key) => { value.id = key; return value; })), ['id'], ['asc'])})
         })
       })
-      .catch(reason=>{console.log('failure action-insertDeck',reason)})
+      .catch(reason=>{console.log('failure action-insertDeck: ',reason)})
   }
 }
 
@@ -56,18 +56,8 @@ export function insertCard(deckId, question, answer) {
         return dispatch(returnDeckInfo(deckInfo))
       })
     })
-    .catch(reason=>{console.log('failure action-insertCard',reason)})
+    .catch(reason=>{console.log('failure action-insertCard: ',reason)})
   }
 }
 
-  //   .then((deckInfo)=>{
-  //   //console.log('insercarddeckInfo',deckInfo)
-  //   if (deckInfo) {
-  //     dispatch({type: types.GET_DECKINFO, payload: deckInfo})
-  //   }
-  //   else {
-  //     console.log('Error in getting updated deck info')
-  //   }
-  //   return deckInfo
-  // })
   

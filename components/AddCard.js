@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { white, purple } from '../utils/colors'
-import TextButton from './TextButton'
-import { addCard } from '../utils/api'
 import { insertCard, getDeckInfo } from '../actions'
 import { connect } from 'react-redux'
 
@@ -17,7 +15,7 @@ class AddCard extends Component {
     const { navigation } = this.props
     const { deckId } = navigation.state.params
     return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
       <View >
         <Text>Question: </Text>
         <TextInput
@@ -51,18 +49,12 @@ class AddCard extends Component {
             <Text style={styles.submitBtnText}>SUBMIT</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-
-  },
   container: {
     flex: 1,
     backgroundColor: white,

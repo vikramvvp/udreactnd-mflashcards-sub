@@ -1,13 +1,9 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TextInput,TouchableOpacity, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
 import { white, purple } from '../utils/colors'
-import TextButton from './TextButton'
-import { createDeck } from '../utils/api'
-import {NavigationActions} from 'react-navigation'
+import { NavigationActions } from 'react-navigation'
 import { insertDeck } from '../actions'
 import { connect } from 'react-redux'
-
-const screenWidth = Dimensions.get('window').width;
 
 class NewDeck extends Component {
   state = {
@@ -16,7 +12,7 @@ class NewDeck extends Component {
   
   render() {
     return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
       <View >
         <Text>Deck Name: </Text>
         <TextInput
@@ -32,25 +28,18 @@ class NewDeck extends Component {
           onPress={()=>{
               this.props.onInsert(this.state.text)
               this.setState({text:''})
-              //this.props.navigation.state.params.onNavigateBack()
               this.props.navigation.dispatch(NavigationActions.back())
               
             }}>
             <Text style={styles.submitBtnText}>SUBMIT</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-
-  },
   container: {
     flex: 1,
     backgroundColor: white,

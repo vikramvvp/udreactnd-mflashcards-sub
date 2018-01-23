@@ -54,7 +54,7 @@ class Card extends Component {
           {correctionPercent >= 0.8 ? 
             `Excellent! You answered ${this.state.correctCardsCount} out of ${cards.length} correctly; go back and study another deck.`
           :
-            `Hmmm! You answered only ${this.state.correctCardsCount} out of ${cards.length} correctly; do you want to restart?`
+            `Hmmm! You answered ${this.state.correctCardsCount !== 0 ? 'only' : ''} ${this.state.correctCardsCount} out of ${cards.length} correctly; do you want to restart?`
           }
         </Text>
       </View>

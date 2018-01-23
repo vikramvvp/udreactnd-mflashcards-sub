@@ -8,7 +8,6 @@ function decks (state = {}, action) {
         decksList: action.payload,
       }
     case types.GET_DECKINFO :
-      //console.log('action', action)
       return {
         ...state,
         deckInfo: action.payload,

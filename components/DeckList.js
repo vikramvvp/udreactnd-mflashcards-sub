@@ -1,14 +1,11 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Platform, TouchableOpacity, AsyncStorage, FlatList } from 'react-native'
+import { FlatList } from 'react-native'
 import { connect } from 'react-redux'
 import { getDecklist } from '../actions'
-import { GET_DECKLIST } from '../actions/types'
 import { fetchDecksList, setDummyData, initialData } from '../utils/api'
-import { white, black, red } from '../utils/colors'
 import { AppLoading } from 'expo'
 import ListRow from './ListRow'
-import TextButton from './TextButton'
 
 class DeckList extends React.Component {
   

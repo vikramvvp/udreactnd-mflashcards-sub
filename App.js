@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
 import { TabNavigator, StackNavigator } from 'react-navigation'
-import { purple, white, red, gray } from './utils/colors'
+import { purple, white } from './utils/colors'
 import DeckList from './components/DeckList'
 import DeckInfo from './components/DeckInfo'
 import NewDeck from './components/NewDeck'
@@ -12,8 +12,6 @@ import AddCard from './components/AddCard'
 import Card from './components/Card'
 import { Constants } from 'expo'
 import thunk from 'redux-thunk'
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { setLocalNotification } from './utils/helpers'
 
 const screenWidth = Dimensions.get('window').width;
@@ -22,15 +20,13 @@ const Tabs = TabNavigator({
   DeckList: {
     screen: DeckList,
     navigationOptions: {
-      tabBarLabel: 'Decks',
-      tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={26} color={tintColor} />
+      tabBarLabel: 'Decks'
     },
   },
   NewDeck: {
     screen: NewDeck,
     navigationOptions: {
-      tabBarLabel: 'New Deck',
-      tabBarIcon: ({ tintColor }) => <FontAwesome name='plus-square' size={26} color={tintColor} />
+      tabBarLabel: 'New Deck'
     },
   }
 },

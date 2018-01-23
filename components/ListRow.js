@@ -1,7 +1,6 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native'
 import { black, gray } from '../utils/colors'
-import { Constants } from 'expo'
 
 const ANIMATION_DURATION = 150;
 const ROW_HEIGHT = 70;
